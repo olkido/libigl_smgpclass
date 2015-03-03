@@ -50,6 +50,16 @@ public:
     float & zoom,
     Eigen::Vector3f& shift);
 
+  // Adjust the view to see the entire model - version without faces
+  IGL_INLINE void align_camera_center(const Eigen::MatrixXd& V);
+  
+  // Determines how much to zoom and shift such that the mesh fills the unit
+  // box (centered at the origin) - version without faces
+  IGL_INLINE void get_scale_and_shift_to_fit_mesh(
+                                                  const Eigen::MatrixXd& P,
+                                                  float & zoom,
+                                                  Eigen::Vector3f& shift);
+
   // ------------------- Drawing functions
 
   // Clear the frame buffers
