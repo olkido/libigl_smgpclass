@@ -52,7 +52,7 @@ private:
 };
 
 
-template <typename DerivedV, typename DerivedF>
+template <typename DerivedVal, typename DerivedV, typename DerivedF>
 class MarchingCubes
 {
   typedef Eigen::PlainObjectBase<DerivedV> PointMatrixType;
@@ -61,8 +61,8 @@ class MarchingCubes
   typedef typename MyMap::const_iterator   MyMapIterator;
   
 public:
-  MarchingCubes(const Eigen::Matrix<typename DerivedV::Scalar, Eigen::Dynamic, 1> &values,
-                const Eigen::Matrix<typename DerivedV::Scalar, Eigen::Dynamic, 3> &points,
+  MarchingCubes(const Eigen::PlainObjectBase<DerivedVal> &values,
+                const const Eigen::PlainObjectBase<DerivedV> &points,
                 const unsigned x_res,
                 const unsigned y_res,
                 const unsigned z_res,
@@ -179,8 +179,10 @@ public:
     
   };
   
-  static typename DerivedF::Scalar  add_vertex(const Eigen::Matrix<typename DerivedV::Scalar, Eigen::Dynamic, 1> &values,
-                                               const Eigen::Matrix<typename DerivedV::Scalar, Eigen::Dynamic, 3> &points,
+  static typename DerivedF::Scalar  add_vertex(const Eigen::PlainObjectBase<DerivedVal> &values,
+                                               const const Eigen::PlainObjectBase<DerivedV> &points,
+//                                               const Eigen::Matrix<typename DerivedV::Scalar, Eigen::Dynamic, 1> &values,
+//                                               const Eigen::Matrix<typename DerivedV::Scalar, Eigen::Dynamic, 3> &points,
                                                unsigned int i0,
                                                unsigned int i1,
                                                PointMatrixType &vertices,
@@ -197,9 +199,9 @@ public:
     const Eigen::Matrix<typename DerivedV::Scalar, 1, 3> & p0 = points.row(i0);
     const Eigen::Matrix<typename DerivedV::Scalar, 1, 3> & p1 = points.row(i1);
     
-    typename DerivedV::Scalar s0 = fabs(values[i0]);
-    typename DerivedV::Scalar s1 = fabs(values[i1]);
-    typename DerivedV::Scalar t  = s0 / (s0+s1);
+    double s0 = fabs(values[i0]);
+    double s1 = fabs(values[i1]);
+    double t  = s0 / (s0+s1);
     
     
     num_vertices++;
@@ -218,16 +220,16 @@ public:
 };
 
 
-template <typename DerivedV, typename DerivedF>
-IGL_INLINE void igl::marching_cubes(const Eigen::Matrix<typename DerivedV::Scalar, Eigen::Dynamic, 1> &values,
-                                    const Eigen::Matrix<typename DerivedV::Scalar, Eigen::Dynamic, 3> &points,
+template <typename DerivedVal, typename DerivedV, typename DerivedF>
+IGL_INLINE void igl::marching_cubes(const Eigen::PlainObjectBase<DerivedVal> &values,
+                                    const const Eigen::PlainObjectBase<DerivedV> &points,
                                     const unsigned x_res,
                                     const unsigned y_res,
                                     const unsigned z_res,
                                     Eigen::PlainObjectBase<DerivedV> &vertices,
                                     Eigen::PlainObjectBase<DerivedF> &faces)
 {
-  MarchingCubes<DerivedV, DerivedF> mc(values, 
+  MarchingCubes<DerivedVal, DerivedV, DerivedF> mc(values,
                                        points, 
                                        x_res, 
                                        y_res, 
@@ -237,8 +239,8 @@ IGL_INLINE void igl::marching_cubes(const Eigen::Matrix<typename DerivedV::Scala
 }
 #ifdef IGL_STATIC_LIBRARY
 // Explicit template specialization
-template void igl::marching_cubes<Eigen::Matrix<float, -1, 3, 0, -1, 3>, Eigen::Matrix<int, -1, 3, 0, -1, 3> >(Eigen::Matrix<Eigen::Matrix<float, -1, 3, 0, -1, 3>::Scalar, -1, 1, 0, -1, 1> const&, Eigen::Matrix<Eigen::Matrix<float, -1, 3, 0, -1, 3>::Scalar, -1, 3, 0, -1, 3> const&, unsigned int, unsigned int, unsigned int, Eigen::PlainObjectBase<Eigen::Matrix<float, -1, 3, 0, -1, 3> >&, Eigen::PlainObjectBase<Eigen::Matrix<int, -1, 3, 0, -1, 3> >&);
-template void igl::marching_cubes<Eigen::Matrix<double, -1, 3, 0, -1, 3>, Eigen::Matrix<int, -1, 3, 0, -1, 3> >(Eigen::Matrix<Eigen::Matrix<double, -1, 3, 0, -1, 3>::Scalar, -1, 1, 0, -1, 1> const&, Eigen::Matrix<Eigen::Matrix<double, -1, 3, 0, -1, 3>::Scalar, -1, 3, 0, -1, 3> const&, unsigned int, unsigned int, unsigned int, Eigen::PlainObjectBase<Eigen::Matrix<double, -1, 3, 0, -1, 3> >&, Eigen::PlainObjectBase<Eigen::Matrix<int, -1, 3, 0, -1, 3> >&);
-template void igl::marching_cubes<Eigen::Matrix<double, -1, 3, 0, -1, 3>, Eigen::Matrix<unsigned int, -1, 3, 0, -1, 3> >(Eigen::Matrix<Eigen::Matrix<double, -1, 3, 0, -1, 3>::Scalar, -1, 1, 0, -1, 1> const&, Eigen::Matrix<Eigen::Matrix<double, -1, 3, 0, -1, 3>::Scalar, -1, 3, 0, -1, 3> const&, unsigned int, unsigned int, unsigned int, Eigen::PlainObjectBase<Eigen::Matrix<double, -1, 3, 0, -1, 3> >&, Eigen::PlainObjectBase<Eigen::Matrix<unsigned int, -1, 3, 0, -1, 3> >&);
-template void igl::marching_cubes<Eigen::Matrix<float, -1, 3, 0, -1, 3>, Eigen::Matrix<unsigned int, -1, 3, 0, -1, 3> >(Eigen::Matrix<Eigen::Matrix<float, -1, 3, 0, -1, 3>::Scalar, -1, 1, 0, -1, 1> const&, Eigen::Matrix<Eigen::Matrix<float, -1, 3, 0, -1, 3>::Scalar, -1, 3, 0, -1, 3> const&, unsigned int, unsigned int, unsigned int, Eigen::PlainObjectBase<Eigen::Matrix<float, -1, 3, 0, -1, 3> >&, Eigen::PlainObjectBase<Eigen::Matrix<unsigned int, -1, 3, 0, -1, 3> >&);
+//template void igl::marching_cubes<Eigen::Matrix<float, -1, 3, 0, -1, 3>, Eigen::Matrix<int, -1, 3, 0, -1, 3> >(Eigen::Matrix<Eigen::Matrix<float, -1, 3, 0, -1, 3>::Scalar, -1, 1, 0, -1, 1> const&, Eigen::Matrix<Eigen::Matrix<float, -1, 3, 0, -1, 3>::Scalar, -1, 3, 0, -1, 3> const&, unsigned int, unsigned int, unsigned int, Eigen::PlainObjectBase<Eigen::Matrix<float, -1, 3, 0, -1, 3> >&, Eigen::PlainObjectBase<Eigen::Matrix<int, -1, 3, 0, -1, 3> >&);
+//template void igl::marching_cubes<Eigen::Matrix<double, -1, 3, 0, -1, 3>, Eigen::Matrix<int, -1, 3, 0, -1, 3> >(Eigen::Matrix<Eigen::Matrix<double, -1, 3, 0, -1, 3>::Scalar, -1, 1, 0, -1, 1> const&, Eigen::Matrix<Eigen::Matrix<double, -1, 3, 0, -1, 3>::Scalar, -1, 3, 0, -1, 3> const&, unsigned int, unsigned int, unsigned int, Eigen::PlainObjectBase<Eigen::Matrix<double, -1, 3, 0, -1, 3> >&, Eigen::PlainObjectBase<Eigen::Matrix<int, -1, 3, 0, -1, 3> >&);
+//template void igl::marching_cubes<Eigen::Matrix<double, -1, 3, 0, -1, 3>, Eigen::Matrix<unsigned int, -1, 3, 0, -1, 3> >(Eigen::Matrix<Eigen::Matrix<double, -1, 3, 0, -1, 3>::Scalar, -1, 1, 0, -1, 1> const&, Eigen::Matrix<Eigen::Matrix<double, -1, 3, 0, -1, 3>::Scalar, -1, 3, 0, -1, 3> const&, unsigned int, unsigned int, unsigned int, Eigen::PlainObjectBase<Eigen::Matrix<double, -1, 3, 0, -1, 3> >&, Eigen::PlainObjectBase<Eigen::Matrix<unsigned int, -1, 3, 0, -1, 3> >&);
+//template void igl::marching_cubes<Eigen::Matrix<float, -1, 3, 0, -1, 3>, Eigen::Matrix<unsigned int, -1, 3, 0, -1, 3> >(Eigen::Matrix<Eigen::Matrix<float, -1, 3, 0, -1, 3>::Scalar, -1, 1, 0, -1, 1> const&, Eigen::Matrix<Eigen::Matrix<float, -1, 3, 0, -1, 3>::Scalar, -1, 3, 0, -1, 3> const&, unsigned int, unsigned int, unsigned int, Eigen::PlainObjectBase<Eigen::Matrix<float, -1, 3, 0, -1, 3> >&, Eigen::PlainObjectBase<Eigen::Matrix<unsigned int, -1, 3, 0, -1, 3> >&);
 #endif
