@@ -1,16 +1,16 @@
 // This file is part of libigl, a simple c++ geometry processing library.
-// 
+//
 // Copyright (C) 2014 Alec Jacobson <alecjacobson@gmail.com>
-// 
-// This Source Code Form is subject to the terms of the Mozilla Public License 
-// v. 2.0. If a copy of the MPL was not distributed with this file, You can 
+//
+// This Source Code Form is subject to the terms of the Mozilla Public License
+// v. 2.0. If a copy of the MPL was not distributed with this file, You can
 // obtain one at http://mozilla.org/MPL/2.0/.
 #ifndef IGL_MARCHINGCUBES_H
 #define IGL_MARCHINGCUBES_H
 #include "igl_inline.h"
 
 #include <Eigen/Core>
-namespace igl 
+namespace igl
 {
   // marching_cubes( values, points, x_res, y_res, z_res, vertices, faces )
   //
@@ -25,7 +25,7 @@ namespace igl
   //  points  #number_of_grid_points x 3 array -- 3-D positions of the grid
   //    points, ordered in x,y,z order:
   //      points[index] = the point at (x,y,z) where :
-  //      x = (index % (xres -1), 
+  //      x = (index % (xres -1),
   //      y = (index / (xres-1)) %(yres-1),
   //      z = index / (xres -1) / (yres -1) ).
   //      where x,y,z index x, y, z dimensions
@@ -37,7 +37,7 @@ namespace igl
   template <typename DerivedVal, typename DerivedV, typename DerivedF>
   IGL_INLINE void marching_cubes(
     const Eigen::PlainObjectBase<DerivedVal> &values,
-    const const Eigen::PlainObjectBase<DerivedV> &points,
+    const Eigen::PlainObjectBase<DerivedV> &points,
     const unsigned x_res,
     const unsigned y_res,
     const unsigned z_res,
