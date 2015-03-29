@@ -16,7 +16,9 @@
 #ifndef IGL_EMBREE_INTERSECTOR_H
 #define IGL_EMBREE_INTERSECTOR_H
 
+#include <iostream>
 #include <Eigen/Core>
+#include <Eigen/Geometry>
 #include <vector>
 #include <embree2/rtcore.h>
 #include <embree2/rtcore_ray.h>
