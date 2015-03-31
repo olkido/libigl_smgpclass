@@ -21,6 +21,9 @@ IGL_INLINE void igl::boundary_loop(
   using namespace Eigen;
   using namespace igl;
 
+  if(F.rows() == 0)
+    return;
+
   MatrixXd Vdummy(F.maxCoeff()+1,1);
   MatrixXi TT,TTi;
   vector<std::vector<int> > VF, VFi;
@@ -29,7 +32,7 @@ IGL_INLINE void igl::boundary_loop(
 
   vector<bool> unvisited = is_border_vertex(Vdummy,F);
   set<int> unseen;
-  for (int i = 0; i < unvisited.size(); ++i)
+  for (size_t i = 0; i < unvisited.size(); ++i)
   {
     if (unvisited[i])
       unseen.insert(unseen.end(),i);
@@ -58,7 +61,7 @@ IGL_INLINE void igl::boundary_loop(
 
         if (TT.row(fid).minCoeff() < 0.) // Face contains boundary edge
         {
-          int vLoc;
+          int vLoc = -1;
           if (F(fid,0) == v) vLoc = 0;
           if (F(fid,1) == v) vLoc = 1;
           if (F(fid,2) == v) vLoc = 2;
@@ -95,12 +98,15 @@ IGL_INLINE void igl::boundary_loop(
   using namespace Eigen;
   using namespace std;
 
+  if(F.rows() == 0)
+    return;
+
   vector<vector<int> > Lall;
   boundary_loop(F,Lall);
 
   int idxMax = -1;
-  int maxLen = 0;
-  for (int i = 0; i < Lall.size(); ++i)
+  size_t maxLen = 0;
+  for (size_t i = 0; i < Lall.size(); ++i)
   {
     if (Lall[i].size() > maxLen)
     {
@@ -110,8 +116,10 @@ IGL_INLINE void igl::boundary_loop(
   }
 
   L.resize(Lall[idxMax].size());
-  for (int i = 0; i < Lall[idxMax].size(); ++i)
+  for (size_t i = 0; i < Lall[idxMax].size(); ++i)
+  {
     L[i] = Lall[idxMax][i];
+  }
 }
 
 template <typename DerivedF, typename DerivedL>
@@ -122,10 +130,18 @@ IGL_INLINE void igl::boundary_loop(
   using namespace Eigen;
   using namespace std;
 
+  if(F.rows() == 0)
+    return;
+
   vector<int> Lvec;
   boundary_loop(F,Lvec);
 
   L.resize(Lvec.size());
-  for (int i = 0; i < Lvec.size(); ++i)
+  for (size_t i = 0; i < Lvec.size(); ++i)
     L(i) = Lvec[i];
 }
+
+#ifdef IGL_STATIC_LIBRARY
+// Explicit template specialization
+template void igl::boundary_loop<Eigen::Matrix<int, -1, -1, 0, -1, -1>, Eigen::Matrix<int, -1, 1, 0, -1, 1> >(Eigen::PlainObjectBase<Eigen::Matrix<int, -1, -1, 0, -1, -1> > const&, Eigen::PlainObjectBase<Eigen::Matrix<int, -1, 1, 0, -1, 1> >&);
+#endif

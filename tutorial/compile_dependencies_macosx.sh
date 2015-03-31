@@ -13,6 +13,6 @@ mkdir build
 cd build
 cp ../ispc/ispc-v1.8.1-osx ispc
 cmake -DCMAKE_BUILD_TYPE=Release ../
-make
+make -j 16
 
 cd ../../../tutorial

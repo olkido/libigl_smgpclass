@@ -9,6 +9,7 @@
 #include "STR.h"
 #endif
 
+using namespace std;
 template <
   typename DerivedV,
   typename DerivedF,

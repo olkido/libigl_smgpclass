@@ -14,8 +14,9 @@
 #if !defined ANT_TW_OPENGL_CORE_INCLUDED
 #define ANT_TW_OPENGL_CORE_INCLUDED
 
+#include <vector>
 #include "TwGraph.h"
-
+#include <vector>
 // ----------------------------------------------------------------------------
 //  OS specific definitions
 // ----------------------------------------------------------------------------
